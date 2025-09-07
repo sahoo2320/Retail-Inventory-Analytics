@@ -1,0 +1,26 @@
+USE InventoryDB;
+GO
+
+SELECT 
+  Store_ID,
+  Product_ID,
+  AVG(Inventory_Level) AS avg_inventory_7d,
+  SUM(Units_Sold) AS total_units_sold_7d,
+
+  ROUND(
+    CASE 
+      WHEN SUM(Units_Sold) = 0 THEN NULL
+      ELSE AVG(Inventory_Level) / SUM(Units_Sold)
+    END, 2
+  ) AS stock_to_sales_ratio,
+
+  CASE
+    WHEN SUM(Units_Sold) = 0 AND AVG(Inventory_Level) > 100 THEN 'Stagnant Inventory'
+    WHEN SUM(Units_Sold) > 0 AND (AVG(Inventory_Level) / SUM(Units_Sold)) > 5 THEN 'Overstocked'
+    ELSE 'Normal'
+  END AS inventory_health_flag
+
+FROM SalesData
+WHERE Date BETWEEN DATEADD(DAY, -7, '2022-12-31') AND '2022-12-31'
+GROUP BY Store_ID, Product_ID
+ORDER BY stock_to_sales_ratio DESC;
