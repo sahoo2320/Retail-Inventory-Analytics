@@ -1,0 +1,10 @@
+use InventoryDB;
+SELECT 
+  Date,
+  Store_ID,
+  Product_ID,
+  Inventory_Level,
+  Units_Sold,
+  Units_Ordered
+FROM SalesData
+ORDER BY date, Store_ID, Product_ID;
