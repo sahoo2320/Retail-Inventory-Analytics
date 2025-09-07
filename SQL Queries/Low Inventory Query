@@ -1,0 +1,35 @@
+USE InventoryDB;
+GO
+
+WITH avg_demand AS (
+    SELECT 
+        Store_ID,
+        Product_ID,
+        AVG(Units_Sold) AS avg_units_sold
+    FROM SalesData
+    WHERE Date BETWEEN DATEADD(DAY, -7, '2022-12-24') AND '2022-12-31'
+    GROUP BY Store_ID, Product_ID
+)
+
+SELECT 
+    inv.Date,
+    inv.Store_ID,
+    inv.Product_ID,
+    inv.Inventory_Level,
+    inv.Units_Sold,
+    inv.Units_Ordered,
+    avg.avg_units_sold,
+    inv.Price,
+    inv.Discount,
+    inv.Demand_Forecast,
+    inv.Weather_Condition,
+    inv.Seasonality,
+    inv.Holiday_Promotion,
+    inv.Competitor_Pricing
+FROM SalesData inv
+JOIN avg_demand avg
+  ON inv.Store_ID = avg.Store_ID 
+ AND inv.Product_ID = avg.Product_ID
+WHERE inv.Date = '2022-12-24' 
+  AND inv.Inventory_Level < avg.avg_units_sold
+ORDER BY avg.avg_units_sold DESC;
