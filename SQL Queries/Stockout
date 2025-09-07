@@ -1,0 +1,30 @@
+USE InventoryDB;
+GO
+
+SELECT 
+    Date,
+    Store_ID,
+    Product_ID,
+    Inventory_Level,
+    Units_Sold,
+    Units_Ordered,
+
+    CASE
+        WHEN Units_Sold > 0 AND Units_Ordered = 0 
+            THEN 'No Replenishment'
+        WHEN Units_Sold = 0 
+            THEN 'No Demand'
+        ELSE 'Likely Stock Miss'
+    END AS Stockout_Reason,
+
+    Price,
+    Discount,
+    Demand_Forecast,
+    Weather_Condition,
+    Holiday_Promotion,
+    Seasonality,
+    Competitor_Pricing
+
+FROM SalesData
+WHERE Inventory_Level = 0
+ORDER BY Date, Store_ID, Product_ID;
