@@ -1,0 +1,24 @@
+use InventoryDB;
+GO
+
+SELECT
+  Date,
+  Store_ID,
+  Product_ID,
+  Units_Sold,
+  Demand_Forecast,
+  (Units_Sold - Demand_Forecast) AS Forecast_Deviation,
+
+  CASE 
+    WHEN (Units_Sold - Demand_Forecast) > 20 THEN 'Underforecasted'
+    WHEN (Units_Sold - Demand_Forecast) < -20 THEN 'Overforecasted'
+    ELSE 'Accurate'
+  END AS Forecast_Accuracy_Flag,
+
+  Price,
+  Discount,
+  Holiday_Promotion,
+  Weather_Condition,
+  Seasonality
+FROM SalesData
+ORDER BY Forecast_Deviation DESC;
