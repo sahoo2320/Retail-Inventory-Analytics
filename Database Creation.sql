@@ -1,2 +1,0 @@
-CREATE Database InventoryDB
-GO
