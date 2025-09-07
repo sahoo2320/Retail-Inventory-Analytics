@@ -1,0 +1,48 @@
+USE InventoryDB;
+GO
+
+CREATE TABLE SalesData (
+    ID INT IDENTITY(1,1) PRIMARY KEY,
+    Date DATE,
+    Store_ID VARCHAR(20),
+    Product_ID VARCHAR(20),
+    Category VARCHAR(50),
+    Region VARCHAR(50),
+    Inventory_Level INT,
+    Units_Sold INT,
+    Units_Ordered INT,
+    Demand_Forecast FLOAT,
+    Price FLOAT,
+    Discount FLOAT,
+    Weather_Condition VARCHAR(50),
+    Holiday_Promotion BIT,
+    Competitor_Pricing FLOAT,
+    Seasonality VARCHAR(50)
+);
+
+INSERT INTO SalesData (
+    Date, Store_ID, Product_ID, Category, Region,
+    Inventory_Level, Units_Sold, Units_Ordered, Demand_Forecast,
+    Price, Discount, Weather_Condition, Holiday_Promotion,
+    Competitor_Pricing, Seasonality
+)
+SELECT 
+    Date,
+    Store_ID,
+    Product_ID,
+    Category,
+    Region,
+    Inventory_Level,
+    Units_Sold,
+    Units_Ordered,
+    Demand_Forecast,
+    Price,
+    Discount,
+    Weather_Condition,
+    Holiday_Promotion,
+    Competitor_Pricing,
+    Seasonality
+FROM inventory_forecasting;
+
+SELECT COUNT(*) AS TotalRows FROM SalesData;
+SELECT TOP 5 * FROM SalesData;
