@@ -1,0 +1,16 @@
+USE InventoryDB;
+GO
+
+SELECT 
+  Store_ID,
+  Product_ID,
+  SUM(Units_Sold) AS total_units_sold,
+  ROUND(AVG(Inventory_Level), 2) AS avg_inventory_level,
+  ROUND(
+    CAST(SUM(Units_Sold) AS FLOAT) / NULLIF(AVG(Inventory_Level), 0),
+    2
+  ) AS Inventory_Turnover
+FROM SalesData
+WHERE date BETWEEN DATEADD(DAY, -7, '2022-12-24') AND '2022-12-31'
+GROUP BY Store_ID, Product_ID
+ORDER BY Inventory_Turnover DESC;
